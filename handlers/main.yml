@@ -1,0 +1,10 @@
+---
+# handlers file for jamiely.haproxy_vip
+- name: reload haproxy
+  service:
+    name: haproxy
+    state: reloaded
+- name: reload keepalived
+  service:
+    name: keepalived
+    state: reloaded

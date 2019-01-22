@@ -1,0 +1,26 @@
+---
+galaxy_info:
+  role_name: jamiely.haproxy_vip
+  author: Jamie Ly
+  description: >
+    An example Ansible role that demonstrates how to
+    test a role involving multiple hosts.
+
+  license: BSD
+
+  min_ansible_version: 2.7.5
+
+  #
+  # platforms is a list of platforms, and each platform has a name and a list of versions.
+  #
+  platforms:
+  - name: Centos
+    versions:
+    - 7.5
+
+  galaxy_tags:
+    - haproxy
+    - keepalived
+    - vip
+
+dependencies: []

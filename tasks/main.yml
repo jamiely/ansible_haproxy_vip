@@ -1,0 +1,28 @@
+---
+# tasks file for jamiely.haproxy_vip
+- name: Install haproxy
+  package:
+    name: haproxy
+- name: Enable haproxy
+  systemd:
+    name: haproxy
+    state: started
+    enabled: true
+- name: Copy haproxy.cfg
+  copy:
+    src: haproxy.cfg
+    dest: /etc/haproxy/haproxy.cfg
+  notify: reload haproxy
+- name: Install keepalived
+  package:
+    name: keepalived
+- name: Setup keepalived service
+  systemd:
+    name: keepalived
+    state: started
+    enabled: true
+- name: Create keepalived configuration
+  template:
+    src: keepalived.conf.j2
+    dest: /etc/keepalived/keepalived.conf
+  notify: reload keepalived

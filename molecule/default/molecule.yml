@@ -1,0 +1,50 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: vagrant
+  provider:
+    name: virtualbox
+lint:
+  name: yamllint
+platforms:
+  - name: host1
+    box: bento/centos-7.5
+    instance_raw_config_args: 
+      # - 'vm.hostname = "host1"'
+      - 'vm.network :private_network, ip: "192.168.3.9"'
+  - name: host2
+    box: bento/centos-7.5
+    instance_raw_config_args: 
+      # - 'vm.hostname = "host2"'
+      - 'vm.network :private_network, ip: "192.168.3.10"'
+provisioner:
+  name: ansible
+  lint:
+    name: ansible-lint
+  inventory:
+    group_vars:
+      all:
+        keepalived_interface: eth1
+        keepalived_peers:
+          - 192.168.3.9
+          - 192.168.3.10
+        keepalived_virtual_ip: 192.168.3.2
+    host_vars:
+      host1:
+        keepalived_state: MASTER
+        keepalived_priority: 200
+        keepalived_peers:
+          - 192.168.3.10
+      host2:
+        keepalived_state: BACKUP
+        keepalived_priority: 100
+        keepalived_peers:
+          - 192.168.3.9
+
+scenario:
+  name: default
+verifier:
+  name: testinfra
+  lint:
+    name: flake8

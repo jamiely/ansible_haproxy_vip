@@ -1,0 +1,15 @@
+---
+# defaults file for jamiely.haproxy_vip
+
+# this is the network interface which the IP will be associated
+# with (probably eth0 by default)
+keepalived_interface: "{{ ansible_default_ipv4.interface }}"
+# This doesn't need to be changed unless there are multiple
+# keepalived clusters
+keepalived_virtual_router_id: 1
+# This should be a list of ipv4 addresses corresponding
+# to each keepalived peer
+keepalived_peers: []
+# This is the VIP that we want the active host to bind to
+# it's network interface.
+keepalived_virtual_ip: null

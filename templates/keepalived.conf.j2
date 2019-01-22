@@ -1,0 +1,46 @@
+# keepalived.conf
+
+vrrp_script chk_haproxy {
+    # check that there is an haproxy pid
+    script "pidof haproxy"
+    # check every 2 seconds
+    interval 2
+}
+
+# we define the behavior of a particular network interface
+vrrp_instance VI_1 {
+    # this instance is bound to the default ipv4 interface
+    interface {{ keepalived_interface }}
+    # this should be either MASTER or BACKUP
+    state {{ keepalived_state }}
+    # MASTER should have a higher priority than BACKUPs
+    priority {{ keepalived_priority }}
+
+    # Used to determine uniqueness among all vrrp instances
+    virtual_router_id {{ keepalived_virtual_router_id }}
+    # This is the IP (not the VIP) of the host.
+    unicast_src_ip {{ ansible_default_ipv4.address }}
+    {% for peer_ip in keepalived_peers %}
+        {% if peer_ip != ansible_default_ipv4.address %}
+
+    # This will be a list of peers that participate in the VIP
+    # failover. In our case, there are two peers total,
+    # host1 and host2. In the configuration file on host1,
+    # we will list host2's IP as a peer, and vice-versa for host2.
+    unicast_peer {
+        {{ peer_ip }}
+    }
+
+        {% endif %}
+    {% endfor %}
+
+	  # the VIP that the host should assume when the track_script fails
+    virtual_ipaddress {
+        {{ keepalived_virtual_ip }}
+    }    
+
+    # The 
+    track_script {
+        chk_haproxy
+    }
+}
