@@ -3,7 +3,7 @@ ansible-lint==3.4.23
 anyconfig==0.9.7
 appnope==0.1.0
 argh==0.26.2
-arrow==0.13.0
+arrow==0.15.1
 asn1crypto==0.24.0
 atomicwrites==1.2.1
 attrs==18.2.0
